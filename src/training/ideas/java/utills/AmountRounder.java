@@ -7,8 +7,10 @@ package training.ideas.java.utills;
  */
 public class AmountRounder {
     public static double round(double amount) {
-        amount = amount * 20;
+        double factor = 100.0/5.0;
+        amount = amount * factor;
         amount = Math.ceil(amount);
-        return amount/20.0;
+        return amount/factor;
     }
+
 }
