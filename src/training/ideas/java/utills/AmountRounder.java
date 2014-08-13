@@ -12,5 +12,11 @@ public class AmountRounder {
         amount = Math.ceil(amount);
         return amount/factor;
     }
+    public static double round(double amount,double roundUpTo) {
+        double factor = 100.0/roundUpTo;
+        amount = amount * factor;
+        amount = Math.ceil(amount);
+        return amount/factor;
+    }
 
 }
