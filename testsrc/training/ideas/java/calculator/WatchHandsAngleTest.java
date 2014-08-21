@@ -37,15 +37,6 @@ public class WatchHandsAngleTest {
     {
         Assert.assertEquals(315.0,WatchAngle.findAngle(7,30),1);
     }
-    @Test
-    public void find_angle_when_time_is_9_55()
-    {
-        Assert.assertEquals(32.5,WatchAngle.findAngle(7,55),1);
-    }
 
-    @Test
-    public void find_angle_when_time_is_1_1()
-    {
-        Assert.assertEquals(272.5,WatchAngle.findAngle(1,1),1);
-    }
+
 }
