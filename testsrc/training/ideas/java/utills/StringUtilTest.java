@@ -17,11 +17,6 @@ public class StringUtilTest {
     @Test
     public void test_for_decompress_string_A4B2CDE3()
     {
-        int[][] x= new int[5][4];
-        System.out.println(x.length);
-        System.out.println(x[0].length);
-      // Assert.
-
-       // Assert.assertEquals("AAAABBCDEEE", StringUtil.deCompress("A4B2CDE3"));
+        Assert.assertEquals("AAAABBCDEEE",StringUtil.deCompress("A4B2CDE3"));
     }
 }

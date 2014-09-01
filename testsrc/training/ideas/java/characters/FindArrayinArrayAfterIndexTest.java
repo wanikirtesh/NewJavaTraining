@@ -8,7 +8,7 @@ import org.junit.Test;
  * Created by idnkiw on 14-08-2014.
  * *****************************
  */
-public class FindArrayInArrayAfterIndexTest {
+public class FindArrayinArrayAfterIndexTest {
     @Test
     public void find_sub_array()
     {
