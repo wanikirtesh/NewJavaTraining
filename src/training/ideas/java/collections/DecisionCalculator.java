@@ -14,14 +14,12 @@ import java.util.*;
 public class DecisionCalculator {
     /// Constructor
     private TreeMap<String, Double> rateSpectrum;
-    private TreeMap<Date, ArrayList<Double>> dateWiseLRV;
 
-    public DecisionCalculator(TreeMap<String, Double> RateSpectrum, TreeMap<Date, ArrayList<Double>> DateWiseLRV){
+    public DecisionCalculator(TreeMap<String, Double> RateSpectrum){
         rateSpectrum = RateSpectrum;
-        dateWiseLRV = DateWiseLRV;
     }
 
-    public TreeMap<Date, TreeMap<String,Decision>> calculate() {
+    public TreeMap<Date, TreeMap<String,Decision>> calculate(TreeMap<Date, List<Double>> dateWiseLRV) {
         TreeMap<Date,TreeMap<String,Decision>> finalDecisionMap = new TreeMap<Date, TreeMap<String, Decision>>();
         Set<Date> dates = dateWiseLRV.keySet();
         for(Date dt:dates){
