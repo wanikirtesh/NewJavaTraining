@@ -13,47 +13,68 @@ import java.util.*;
  */
 public class DecisionCalculatorTest {
     @Test
-    public void verify_FPLOS_MINLOS_pattern() throws Exception {
+    public void test_to_verify_FPLOS_MINLOS_pattern_for_various_N_Y() throws Exception {
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-        Date occupancyDate = df.parse("01-Jan-2014");
-        Calendar cl = new GregorianCalendar();
-        cl.setTime(occupancyDate);
+        /* Creating RateSpectrum*/
         TreeMap<String,Double> rateSpectrum = new TreeMap<String,Double>() {{
             put("Rate1",10.0); put("Rate2",12.0);
         }};
-        TreeMap<Date,ArrayList<Double>> dtLRV = new TreeMap<Date, ArrayList<Double>>();
-        ArrayList<Double> lrvList = new ArrayList<Double>(){{
-            add(8.0);add(7.0);add(12.0);add(12.0);add(5.0);add(20.0);add(0.0);
-        }};
-        dtLRV.put(occupancyDate,lrvList);
-         lrvList = new ArrayList<Double>(){{
-            add(7.0);add(12.0);add(12.0);add(5.0);add(20.0);add(0.0);add(10.0);
-        }};
-        cl.add(Calendar.DATE,1);
-        dtLRV.put(cl.getTime(),lrvList);
-        DecisionCalculator fpMinLosCalculator = new DecisionCalculator(rateSpectrum,dtLRV);
-        Assert.assertEquals(populateDecisionMap(),fpMinLosCalculator.calculate());
+        /*Creating DateWise LRV Map */
+        TreeMap<Date,List<Double>> dtLRV = new TreeMap<Date, List<Double>>();
+        dtLRV.put(df.parse("01-Jan-2014"),Arrays.asList(8.0,7.0,12.0,12.0,5.0,20.0,0.0));
+        dtLRV.put(df.parse("02-Jan-2014"),Arrays.asList(7.0,12.0,12.0,5.0,20.0,0.0,10.0));
+        DecisionCalculator fpMinLosCalculator = new DecisionCalculator(rateSpectrum);
+        Assert.assertEquals(populateExpectedDecisionMap(dtLRV, rateSpectrum, "YYYYYNY", "YYYYYYY", "YYNYNYY", "YYYYYYY"),fpMinLosCalculator.calculate(dtLRV));
     }
-    private  Map<Date,TreeMap<String,Decision>> populateDecisionMap() throws Exception
-    {
+
+
+    @Test
+    public void test_to_verify_FPLOS_MINLOS_pattern_for_all_N() throws Exception {
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-        Date occupancyDate = df.parse("01-Jan-2014");
-        Calendar cl = new GregorianCalendar();
-        cl.setTime(occupancyDate);
-        Map<Date,TreeMap<String,Decision>> resultMap = new TreeMap<Date, TreeMap<String, Decision>>();
-        resultMap.put(occupancyDate,new TreeMap<String, Decision>(){{
-        Decision d1 = new Decision("YYYYYNY",1);
-        put("Rate1", d1);
-        d1 = new Decision("YYYYYYY",1);
-        put("Rate2",d1);
-        }});
-        cl.add(Calendar.DATE,1);
-        resultMap.put(cl.getTime(),new TreeMap<String, Decision>(){{
-        Decision d1 = new Decision("YYNYNYY",1);
-        put("Rate1",d1);
-        d1 = new Decision("YYYYYYY",1);
-        put("Rate2",d1);
-        }});
-        return resultMap;
+        /* Creating RateSpectrum*/
+        TreeMap<String,Double> rateSpectrum = new TreeMap<String,Double>() {{
+            put("Rate1",5.0); put("Rate2",2.0);
+        }};
+        /*Creating DateWise LRV Map */
+        TreeMap<Date,List<Double>> dtLRV = new TreeMap<Date, List<Double>>();
+        dtLRV.put(df.parse("01-Jan-2014"),Arrays.asList(8.0,7.0,12.0,12.0,15.0,20.0,10.0));
+        dtLRV.put(df.parse("02-Jan-2014"),Arrays.asList(7.0,12.0,12.0,15.0,20.0,10.0,10.0));
+        DecisionCalculator fpMinLosCalculator = new DecisionCalculator(rateSpectrum);
+        Assert.assertEquals(populateExpectedDecisionMap(dtLRV, rateSpectrum, "NNNNNNN", "NNNNNNN", "NNNNNNN", "NNNNNNN"),fpMinLosCalculator.calculate(dtLRV));
+    }
+
+    @Test
+    public void test_to_verify_FPLOS_MINLOS_pattern_for_all_Y() throws Exception {
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        /* Creating RateSpectrum*/
+        TreeMap<String,Double> rateSpectrum = new TreeMap<String,Double>() {{
+            put("Rate1",25.0); put("Rate2",22.0);
+        }};
+        /*Creating DateWise LRV Map */
+        TreeMap<Date,List<Double>> dtLRV = new TreeMap<Date, List<Double>>();
+        dtLRV.put(df.parse("01-Jan-2014"),Arrays.asList(8.0,7.0,12.0,12.0,15.0,20.0,10.0));
+        dtLRV.put(df.parse("02-Jan-2014"),Arrays.asList(7.0,12.0,12.0,15.0,20.0,10.0,10.0));
+        DecisionCalculator fpMinLosCalculator = new DecisionCalculator(rateSpectrum);
+        Assert.assertEquals(populateExpectedDecisionMap(dtLRV, rateSpectrum, "YYYYYYY", "YYYYYYY", "YYYYYYY", "YYYYYYY"),fpMinLosCalculator.calculate(dtLRV));
+    }
+
+
+
+
+
+    private TreeMap<Date, TreeMap<String,Decision>> populateExpectedDecisionMap(TreeMap<Date, List<Double>> dtLRV, TreeMap<String, Double> rateSpectrum, String... expectedFPLOS) {
+        TreeMap<Date, TreeMap<String,Decision>> populatedMap = new TreeMap<Date, TreeMap<String, Decision>>();
+        Set<Date> dateSet = dtLRV.keySet();
+        Set<String> rates = rateSpectrum.keySet();
+        int cnt =0;
+        for(Date dt:dateSet){
+            TreeMap<String,Decision> decisionMap = new TreeMap<String, Decision>();
+            for(String rate:rates){
+                decisionMap.put(rate,new Decision(expectedFPLOS[cnt],expectedFPLOS[cnt].toUpperCase().indexOf("Y")+1));
+                cnt++;
+            }
+            populatedMap.put(dt,decisionMap);
+        }
+        return populatedMap;
     }
 }

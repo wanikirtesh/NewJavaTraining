@@ -23,12 +23,10 @@ public class Decision {
 @Override
 public boolean equals(Object aThat)
 {
-    try{return ((Decision)aThat).getfPLOS().equals(this.fPLOS)&&((Decision)aThat).getMinLOS()==this.minLOS;}
-    catch (Exception e)
-    {
-        e.printStackTrace();
-        return false;
-    }
+    if(aThat instanceof Decision)
+    return ((Decision)aThat).getfPLOS().equals(this.fPLOS)&&((Decision)aThat).getMinLOS()==this.minLOS;
+    return false;
+
 }
     private int minLOS;
     private String fPLOS;
